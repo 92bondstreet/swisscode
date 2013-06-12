@@ -33,6 +33,9 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
  
+ // Random user agent for curl
+ require_once('useragent.php');
+ 
 /**
  * THE PERFECT PHP CLEAN URL GENERATOR
  * http://cubiq.org/the-perfect-php-clean-url-generator
@@ -85,6 +88,65 @@ function MacG_trim_text($input, $length, $ellipses = true, $strip_html = true) {
     }
   
     return $trimmed_text;
+}
+
+/**
+ * Connect to an URL with CURL
+ *
+ * @param $url		to connect
+ * @param $proxy	
+ *
+ * @return content
+ */
+ 
+function MacG_connect_to($url, $proxy=NULL){
+			
+	$ch = curl_init();
+
+	// webnavigator simulator
+	$header[0] = "Accept: text/xml,application/xml,application/xhtml+xml,";
+	$header[0] .= "text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+	$header[] = "Cache-Control: max-age=0";
+	$header[] = "Connection: keep-alive";
+	$header[] = "Keep-Alive: 300";
+	$header[] = "Accept-Charset: utf-8";
+	$header[] = "Accept-Language: en"; // en language
+	$header[] = "Pragma: "; // simulate brower
+	$useragent = random_user_agent();
+	
+	
+	//Set options for curl session
+	$options = array(CURLOPT_USERAGENT => $useragent,	
+			 CURLOPT_TIMEOUT => 60,
+			 /*CURLOPT_HEADER => TRUE,*/
+			 CURLOPT_HTTPHEADER => $header,
+			 CURLOPT_RETURNTRANSFER => TRUE,
+			 CURLOPT_COOKIEFILE => 'cookie.txt',
+			 CURLOPT_COOKIEJAR => 'cookies.txt',
+			 CURLOPT_SSL_VERIFYPEER => FALSE,
+			 CURLOPT_FOLLOWLOCATION => TRUE);
+
+	if(isset($proxy)){
+		$options[CURLOPT_HTTPPROXYTUNNEL] = 1;
+		$options[CURLOPT_PROXY] =  $proxy;
+		$options[CURLOPT_PROXYTYPE] =  CURLPROXY_HTTP;
+    }
+			 
+	$options[CURLOPT_URL] = $url;
+	$options[CURLOPT_FOLLOWLOCATION] = TRUE;
+	curl_setopt_array($ch, $options);
+	$content = curl_exec($ch);
+
+	// Error or not ?
+	if(curl_errno($ch))  
+	{ 
+	   echo 'Erreur Curl : ' . curl_error($ch);  
+	} 
+	
+	//Close curl session
+	curl_close($ch);
+	
+	return $content;
 }
  
  

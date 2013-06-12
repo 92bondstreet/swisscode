@@ -1,7 +1,7 @@
 SwissCode
 =========
 
-SwissCode (aka aka PHP MacGyver) is a set of PHP code lines to help developers with specific tools and routines. 
+SwissCode (aka PHP MacGyver) is a set of PHP code lines to help developers with specific tools and routines. 
 
 Like a Swiss Army Knife but for PHP coding.
 
