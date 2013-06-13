@@ -35,6 +35,9 @@
  
  // Random user agent for curl
  require_once('useragent.php');
+// PHP Simple HTML DOM Parser
+// Download on http://sourceforge.net/projects/simplehtmldom/
+ require_once('simple_html_dom.php');
  
 /**
  * THE PERFECT PHP CLEAN URL GENERATOR
