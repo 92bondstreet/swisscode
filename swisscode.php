@@ -97,12 +97,13 @@ function MacG_trim_text($input, $length, $ellipses = true, $strip_html = true) {
  * Connect to an URL with CURL
  *
  * @param $url		to connect
- * @param $proxy	
+ * @param $proxy	The HTTP proxy to tunnel requests through.
+ * @param $userpwd	A username and password formatted as "[username]:[password]" to use for the connection to the proxy.
  *
  * @return content
  */
  
-function MacG_connect_to($url, $proxy=NULL){
+function MacG_connect_to($url, $proxy=NULL, $userpwd=NULL){
 			
 	$ch = curl_init();
 
@@ -133,6 +134,8 @@ function MacG_connect_to($url, $proxy=NULL){
 		$options[CURLOPT_HTTPPROXYTUNNEL] = 1;
 		$options[CURLOPT_PROXY] =  $proxy;
 		$options[CURLOPT_PROXYTYPE] =  CURLPROXY_HTTP;
+		if(isset($userpwd))			
+			$options[CURLOPT_PROXYUSERPWD] =  $userpwd;
     }
 			 
 	$options[CURLOPT_URL] = $url;
